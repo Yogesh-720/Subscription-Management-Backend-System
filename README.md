@@ -138,6 +138,5 @@ Your backend will be running at `http://localhost:3000`.
 - User analytics with Redis
 - Integration with Resend (Transactional emails)
 
----
 
 > Made with ❤️ by [Yogesh Saini](https://github.com/Yogesh-720)
