@@ -16,8 +16,6 @@ This project provides robust JWT authentication, advanced bot protection, schedu
 - [📬 API Overview](#-api-overview)
 - [🔐 Security](#-security)
 - [🧠 Future Improvements](#-future-improvements)
-- [📄 License](#-license)
-
 ---
 
 ## 🧠 Introduction
@@ -138,5 +136,6 @@ Your backend will be running at `http://localhost:3000`.
 - User analytics with Redis
 - Integration with Resend (Transactional emails)
 
+---
 
 > Made with ❤️ by [Yogesh Saini](https://github.com/Yogesh-720)
