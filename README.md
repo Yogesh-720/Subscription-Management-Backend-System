@@ -140,10 +140,4 @@ Your backend will be running at `http://localhost:3000`.
 
 ---
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
 > Made with ❤️ by [Yogesh Saini](https://github.com/Yogesh-720)
