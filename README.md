@@ -70,8 +70,8 @@ This project is a full-featured backend service for managing user subscriptions 
 ### 📦 Clone the Repo
 
 ```bash
-git clone https://github.com/yourusername/subscription-backend.git
-cd subscription-backend
+git clone https://github.com/Yogesh-720/Subscription-Management-Backend-System.git
+cd Subscription-Management-Backend-System
 ```
 
 ### 📥 Install Dependencies
