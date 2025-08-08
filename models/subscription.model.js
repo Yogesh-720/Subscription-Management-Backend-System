@@ -3,11 +3,12 @@ import mongoose from 'mongoose';
 const subscriptionSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Subscription name is required'],
+        required: [true, 'Subscription Name is required'],
         trim: true,
         minLength: 2,
         maxLength: 100,
     },
+
     price: {
         type: Number,
         required: [true, 'Subscription price is required'],
@@ -62,7 +63,6 @@ const subscriptionSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-
 // Auto-calculate renewal date if missing.
 subscriptionSchema.pre('save', function (next) {
     if (!this.renewalDate) {
@@ -84,4 +84,5 @@ subscriptionSchema.pre('save', function (next) {
 });
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
+
 export default Subscription;
