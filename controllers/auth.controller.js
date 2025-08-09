@@ -48,11 +48,11 @@ export const signUp = async (req, res, next) => {
     }
 }
 
-export const signIn = async (req, res, next) => {
-    //Implement SignIn Logic Here
-
-}
-export const signOut = async (req, res, next) => {
-    //Implement SignOut Logic Here
-
-}
+// export const signIn = async (req, res, next) => {
+//     //Implement SignIn Logic Here
+//
+// }
+// export const signOut = async (req, res, next) => {
+//     //Implement SignOut Logic Here
+//
+// }
