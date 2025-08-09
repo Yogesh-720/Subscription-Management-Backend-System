@@ -26,6 +26,17 @@ const errorMiddleware = (err, req, res, next) => {
              error.statusCode = 400;
          }
 
+        // JWT errors
+        if (err.name === 'JsonWebTokenError') {
+            error = new Error('Invalid token. Please log in again.');
+            error.statusCode = 401;
+        }
+
+        if (err.name === 'TokenExpiredError') {
+            error = new Error('Your token has expired. Please log in again.');
+            error.statusCode = 401;
+        }
+
          res.status(err.statusCode || 500).json({
              success: false,
              error : error.message || 'Server Error'
