@@ -5,54 +5,77 @@ import jwt from "jsonwebtoken";
 import {JWT_EXPIRES_IN, JWT_SECRET} from "../config/env.js";
 
 export const signUp = async (req, res, next) => {
-     //Implement SignUp Logic Here
     const session = await mongoose.startSession();
-    session.startTransaction();
-
     try {
-        // Logic to Create new User
-        const {name, email, password} = req.body;
+        await session.withTransaction(async () => {
+            const { name, email, password } = req.body;
 
-        // check if user already exists
-        const existingUser = await User.findOne({email});
-
-        if (existingUser) {
-            const error = new Error('User already exist');
-            error.statusCode = 409;
-            throw error;
-        }
-
-        // Hash Password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        const newUsers = await User.create([{ name, email, password: hashedPassword }],{ session });
-        const token = jwt.sign({ userId: newUsers[0]._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-
-        await session.commitTransaction();
-        session.endSession();
-
-        res.status(201).json({
-            success: true,
-            message: 'User created successfully',
-            data: {
-                token,
-                user: newUsers[0],
+            const existingUser = await User.findOne({ email }).session(session);
+            if (existingUser) {
+                const err = new Error('User already exists');
+                err.statusCode = 409;
+                throw err;
             }
-        })
-    }
-    catch (error) {
-        await session.abortTransaction();
+
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            const user = await User.create([{ name, email, password: hashedPassword }], { session });
+            const created = user[0];
+
+            const token = jwt.sign({ userId: created._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+
+            const userToSend = created.toObject();
+            delete userToSend.password;
+
+            res.status(201).json({
+                success: true,
+                message: 'User created successfully',
+                data: { token, user: userToSend }});
+        });
+    } catch (err) {
+        next(err);
+    } finally {
         session.endSession();
-        next(error);
     }
 }
 
-// export const signIn = async (req, res, next) => {
-//     //Implement SignIn Logic Here
-//
-// }
-// export const signOut = async (req, res, next) => {
-//     //Implement SignOut Logic Here
-//
-// }
+export const signIn = async (req, res, next) => {
+    //Implement SignIn Logic Here
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({email});
+        if (!user) {
+            const error = new Error('User Not Found');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            const error = new Error('Invalid Password');
+            error.statusCode = 401;
+            throw error;
+        }
+
+        const token = jwt.sign({userId : user._id}, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+
+        res.status(200).json({
+            success: true,
+            message: 'User logged in successfully',
+            data: {
+                token,
+                user,
+            }
+        });
+
+    }
+    catch (err) {
+        next(err);
+    }
+}
+export const signOut = async (req, res, next) => {
+    //Implement SignOut Logic Here
+
+}
