@@ -1,8 +1,9 @@
 import aj from '../config/arcjet.js';
+import {isSpoofedBot} from "@arcjet/inspect";
 
 export const arcjetMiddleware = async (req, res, next) => {
     try {
-        const decision = await aj.protect(req, { requested: 1 });
+        const decision = await aj.protect(req,{requested:1});
         console.log("Arcjet decision", decision);
 
         if (decision.isDenied()) {
@@ -13,6 +14,13 @@ export const arcjetMiddleware = async (req, res, next) => {
             } else {
                 return res.status(403).json({error:"Access Denied"});
             }
+        }
+        else if (decision.ip.isHosting()) {
+            res.writeHead(403, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Forbidden" }));
+        } else if (decision.results.some(isSpoofedBot)) {
+            res.writeHead(403, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Forbidden" }));
         }
         next();
     }
