@@ -1,16 +1,17 @@
 import {Router} from 'express';
 import {authorize} from "../middlewares/auth.middleware.js";
-import {createSubscription, getUserSubscriptions} from "../controllers/subscription.controller.js";
+import {
+    createSubscription,
+    getAllSubscriptions,
+    getSubscription,
+    getUserSubscriptions
+} from "../controllers/subscription.controller.js";
 
 const subscriptionRouter = Router();
 
-subscriptionRouter.get('/', (req, res) => {
-    res.send({title: 'GET all Subscriptions'});
-});
+subscriptionRouter.get('/', getAllSubscriptions);
 
-subscriptionRouter.get('/:id', (req, res) => {
-    res.send({title: 'GET Subscription details'});
-});
+subscriptionRouter.get('/:id', getSubscription);
 
 subscriptionRouter.post('/', authorize , createSubscription);
 
