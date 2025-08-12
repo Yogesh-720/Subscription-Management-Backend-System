@@ -52,6 +52,7 @@ export const getAllSubscriptions = async (req, res, next) => {
 export const getSubscription = async (req, res, next) => {
     try {
         const subscription = await Subscription.findById(req.params.id);
+
         if (!subscription) {
             const error = new Error("Subscription does not exist");
             error.status = 401;
